@@ -1,0 +1,14 @@
+scrape_configs:
+  # Scrape Prometheus itself every 5 seconds.
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Scrape shortly every 5 seconds.
+  - job_name: 'shortly'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:8080']
+        labels:
+          group: 'develop'
