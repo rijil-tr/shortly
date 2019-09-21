@@ -1,22 +1,22 @@
-package main
+package shortener
 
 import (
 	"time"
 
 	"github.com/go-kit/kit/log"
-	"github.com/rijil-tr/shortly/repository"
+	"github.com/rijil-tr/shortly"
 )
 
 type loggingService struct {
 	logger log.Logger
-	next   repository.LinkRepository
+	next   Service
 }
 
-func NewLoggingService(logger log.Logger, s repository.LinkRepository) repository.LinkRepository {
+func NewLoggingService(logger log.Logger, s Service) Service {
 	return &loggingService{logger, s}
 }
 
-func (s *loggingService) New(url string) (r *repository.Link, err error) {
+func (s *loggingService) New(url string) (r *shortly.Link, err error) {
 	defer func(begin time.Time) {
 		defer func(begin time.Time) {
 			s.logger.Log(
@@ -29,7 +29,7 @@ func (s *loggingService) New(url string) (r *repository.Link, err error) {
 	}(time.Now())
 	return s.next.New(url)
 }
-func (s *loggingService) Get(id string) (r *repository.Link, err error) {
+func (s *loggingService) Get(id string) (r *shortly.Link, err error) {
 	defer func(begin time.Time) {
 		defer func(begin time.Time) {
 			s.logger.Log(

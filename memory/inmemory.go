@@ -1,13 +1,15 @@
-package repository
+package memory
 
 import (
 	"fmt"
 	"math/rand"
 	"net/url"
+
+	"github.com/rijil-tr/shortly"
 )
 
 type inmem struct {
-	links map[string]*Link
+	links map[string]*shortly.Link
 }
 
 func randomString() string {
@@ -15,16 +17,16 @@ func randomString() string {
 }
 
 // NewInMemory returns a new in-memory Link
-func NewInMemory() LinkRepository {
-	return &inmem{links: make(map[string]*Link)}
+func NewInMemory() shortly.LinkRepository {
+	return &inmem{links: make(map[string]*shortly.Link)}
 }
 
 // New creates a short url
-func (mem *inmem) New(u string) (*Link, error) {
+func (mem *inmem) New(u string) (*shortly.Link, error) {
 	if _, err := url.ParseRequestURI(u); err != nil {
 		return nil, err
 	}
-	l := &Link{
+	l := &shortly.Link{
 		ID:  randomString(),
 		URL: u,
 	}
@@ -32,10 +34,10 @@ func (mem *inmem) New(u string) (*Link, error) {
 	return l, nil
 }
 
-func (mem *inmem) Get(id string) (*Link, error) {
+func (mem *inmem) Get(id string) (*shortly.Link, error) {
 	l, ok := mem.links[id]
 	if !ok {
-		return nil, ErrNoSuchLink
+		return nil, shortly.ErrNoSuchLink
 	}
 	return l, nil
 }
@@ -43,7 +45,7 @@ func (mem *inmem) Get(id string) (*Link, error) {
 func (mem *inmem) CountVisit(id string) error {
 	l, ok := mem.links[id]
 	if !ok {
-		return ErrNoSuchLink
+		return shortly.ErrNoSuchLink
 	}
 	l.Count++
 	return nil

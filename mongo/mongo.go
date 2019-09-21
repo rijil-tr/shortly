@@ -1,8 +1,11 @@
-package repository
+package mongo
 
 import (
+	"fmt"
+	"math/rand"
 	"net/url"
 
+	"github.com/rijil-tr/shortly"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -13,7 +16,7 @@ type mongo struct {
 }
 
 // NewMongoRepository returns a MongoDB store for storing links
-func NewMongoRepository(db string, session *mgo.Session) (LinkRepository, error) {
+func NewMongoRepository(db string, session *mgo.Session) (shortly.LinkRepository, error) {
 	r := &mongo{
 		db:      db,
 		session: session,
@@ -37,7 +40,7 @@ func NewMongoRepository(db string, session *mgo.Session) (LinkRepository, error)
 	return r, nil
 }
 
-func (r *mongo) New(u string) (*Link, error) {
+func (r *mongo) New(u string) (*shortly.Link, error) {
 	sess := r.session.Copy()
 	defer sess.Close()
 
@@ -46,7 +49,7 @@ func (r *mongo) New(u string) (*Link, error) {
 	if _, err := url.ParseRequestURI(u); err != nil {
 		return nil, err
 	}
-	l := &Link{
+	l := &shortly.Link{
 		ID:  randomString(),
 		URL: u,
 	}
@@ -58,15 +61,15 @@ func (r *mongo) New(u string) (*Link, error) {
 	return l, nil
 }
 
-func (r *mongo) Get(id string) (*Link, error) {
+func (r *mongo) Get(id string) (*shortly.Link, error) {
 	sess := r.session.Copy()
 	defer sess.Close()
 
 	c := sess.DB(r.db).C("links")
-	var result Link
+	var result shortly.Link
 	if err := c.Find(bson.M{"id": id}).One(&result); err != nil {
 		if err == mgo.ErrNotFound {
-			return nil, ErrNoSuchLink
+			return nil, shortly.ErrNoSuchLink
 		}
 		return nil, err
 	}
@@ -80,15 +83,19 @@ func (r *mongo) CountVisit(id string) error {
 
 	c := sess.DB(r.db).C("links")
 
-	var result Link
+	var result shortly.Link
 	change := mgo.Change{
 		Update:    bson.M{"$inc": bson.M{"count": 1}},
 		ReturnNew: true,
 	}
 	_, err := c.Find(bson.M{"id": id}).Apply(change, &result)
 	if err != nil {
-		return ErrNoSuchLink
+		return shortly.ErrNoSuchLink
 	}
 
 	return nil
+}
+
+func randomString() string {
+	return fmt.Sprintf("%X", rand.Int63())
 }

@@ -1,19 +1,19 @@
-package main
+package shortener
 
 import (
 	"time"
 
 	"github.com/go-kit/kit/metrics"
-	"github.com/rijil-tr/shortly/repository"
+	"github.com/rijil-tr/shortly"
 )
 
 type instrumentingService struct {
 	requestCount   metrics.Counter
 	requestLatency metrics.Histogram
-	next           repository.LinkRepository
+	next           Service
 }
 
-func NewInstrumentingService(counter metrics.Counter, latency metrics.Histogram, s repository.LinkRepository) repository.LinkRepository {
+func NewInstrumentingService(counter metrics.Counter, latency metrics.Histogram, s Service) Service {
 	return &instrumentingService{
 		requestCount:   counter,
 		requestLatency: latency,
@@ -21,14 +21,14 @@ func NewInstrumentingService(counter metrics.Counter, latency metrics.Histogram,
 	}
 }
 
-func (s *instrumentingService) New(url string) (*repository.Link, error) {
+func (s *instrumentingService) New(url string) (*shortly.Link, error) {
 	defer func(begin time.Time) {
 		s.requestCount.With("method", "new").Add(1)
 		s.requestLatency.With("method", "new").Observe(time.Since(begin).Seconds())
 	}(time.Now())
 	return s.next.New(url)
 }
-func (s *instrumentingService) Get(id string) (*repository.Link, error) {
+func (s *instrumentingService) Get(id string) (*shortly.Link, error) {
 	defer func(begin time.Time) {
 		s.requestCount.With("method", "get").Add(1)
 		s.requestLatency.With("method", "get").Observe(time.Since(begin).Seconds())

@@ -3,7 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/rijil-tr/shortly?style=flat-square)](https://goreportcard.com/badge/github.com/rijil-tr/shortly)
 
 
-Shortly is a simple URL shortener service written in Golang
+Shortly is a simple URL shortener service written in Golang.
 More detailed step by step tutorial can be found [here](https://github.com/campoy/links).
 
 ### Running Shortly
