@@ -11,6 +11,21 @@
 Shortly is a simple URL shortener service written in Golang.
 More detailed step by step tutorial can be found [here](https://github.com/campoy/links).
 
+
+Our URL shortening system should meet the following requirements:
+
+---
+### Functional
+- [X] Given a URL, our service should generate a shorter and unique alias of it. This is called a short link.
+- [X] When users access a short link, our service should redirect them to the original link.
+- [ ] Users should optionally be able to pick a custom short link for their URL.
+- [ ] Links will expire after a standard default timespan. Users should be able to specify the expiration time.
+
+### Non-Functional
+- [ ] The system should be highly available.
+- [ ] URL redirection should happen in real-time with minimal latency.
+- [X] Shortened links should not be guessable.
+---
 ### Running Shortly
 
 ```sh
@@ -27,14 +42,3 @@ Redirect
 
 Visitor Count
 `curl http://localhost:8080/s/3E84B09B18848F91`
-
----
-#### Task Lists
-- [x] Write a simple URL shortening REST service
-- [x] Add instrumentation and logging
-- [ ] Add authentication layer
-- [ ] Add support for GRPC
-- [ ] Create a key generator micro service
-- [ ] Build UI in ReactJS
-- [ ] Deploy services using Kubernetes 
----
