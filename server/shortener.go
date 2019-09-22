@@ -17,7 +17,7 @@ type shorteningHandler struct {
 	logger log.Logger
 }
 
-var home = template.Must(template.ParseFiles("home.html"))
+var home = template.Must(template.ParseFiles("public/home.html"))
 
 func (h *shorteningHandler) router() *mux.Router {
 	r := mux.NewRouter()
@@ -28,13 +28,14 @@ func (h *shorteningHandler) router() *mux.Router {
 	return r
 }
 
-// index serve the landing page
+// Index serve the landing page
 func (h *shorteningHandler) Index(w http.ResponseWriter, r *http.Request) {
 	if err := home.Execute(w, nil); err != nil {
 		h.logger.Log("could not render template: ", err)
 	}
 }
 
+// New creates a short url
 func (h *shorteningHandler) New(w http.ResponseWriter, r *http.Request) {
 	var data struct {
 		Code  int
@@ -50,6 +51,7 @@ func (h *shorteningHandler) New(w http.ResponseWriter, r *http.Request) {
 	} else {
 		data.Code = http.StatusCreated
 		data.Msg = "link successfully created"
+		// FIXME: Find a better approach here
 		data.Link = fmt.Sprintf("http://localhost:8080/l/%s", l.ID)
 		data.Stats = fmt.Sprintf("http://localhost:8080/s/%s", l.ID)
 	}
@@ -58,6 +60,7 @@ func (h *shorteningHandler) New(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Get redirect to the long url given a valid short url
 func (h *shorteningHandler) Get(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Path[3:]
 	l, err := h.s.Get(id)
@@ -72,7 +75,6 @@ func (h *shorteningHandler) Get(w http.ResponseWriter, r *http.Request) {
 	h.s.CountVisit(id)
 	fmt.Fprintf(w, "<p>redirecting to %s...</p>", l.URL)
 	fmt.Fprintf(w, "<script>setTimeout(function() { window.location = '%s'}, 1000)</script>", l.URL)
-
 }
 
 // Status tell the number of hit on a short URL

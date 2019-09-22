@@ -13,6 +13,7 @@ type instrumentingService struct {
 	next           Service
 }
 
+// NewInstrumentingService will create a new service by wrapping it over request latency
 func NewInstrumentingService(counter metrics.Counter, latency metrics.Histogram, s Service) Service {
 	return &instrumentingService{
 		requestCount:   counter,
@@ -21,6 +22,7 @@ func NewInstrumentingService(counter metrics.Counter, latency metrics.Histogram,
 	}
 }
 
+// New gives metrics of POST / endpoint
 func (s *instrumentingService) New(url string) (*shortly.Link, error) {
 	defer func(begin time.Time) {
 		s.requestCount.With("method", "new").Add(1)
@@ -28,6 +30,8 @@ func (s *instrumentingService) New(url string) (*shortly.Link, error) {
 	}(time.Now())
 	return s.next.New(url)
 }
+
+// Get gives metrics of GET /l/{id} endpoint
 func (s *instrumentingService) Get(id string) (*shortly.Link, error) {
 	defer func(begin time.Time) {
 		s.requestCount.With("method", "get").Add(1)
@@ -35,6 +39,8 @@ func (s *instrumentingService) Get(id string) (*shortly.Link, error) {
 	}(time.Now())
 	return s.next.Get(id)
 }
+
+// Get gives metrics of GET /s/{id} endpoint
 func (s *instrumentingService) CountVisit(id string) error {
 	defer func(begin time.Time) {
 		s.requestCount.With("method", "visit").Add(1)

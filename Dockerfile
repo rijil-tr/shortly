@@ -11,6 +11,7 @@ RUN go build -o shortly
 
 FROM alpine:3.7
 WORKDIR /app
-COPY --from=BUILD /app/cmd /app
+COPY --from=BUILD /app/cmd/shortly /app
+COPY --from=BUILD /app/public /app/public
 EXPOSE 8080
 CMD ["/app/shortly"]

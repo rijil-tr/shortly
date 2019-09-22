@@ -10,12 +10,14 @@ import (
 	"github.com/rijil-tr/shortly/shortener"
 )
 
+// Server holds the dependencies for a HTTP server.
 type Server struct {
 	Shortener shortener.Service
 	Logger    log.Logger
 	router    *mux.Router
 }
 
+// New returns a new HTTP server.
 func NewSever(ss shortener.Service, logger log.Logger) *Server {
 	s := &Server{
 		Shortener: ss,
@@ -49,10 +51,12 @@ func accessControl(h http.Handler) http.Handler {
 	})
 }
 
+// health check
 func health(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]bool{"ok": true})
 }
 
+// ServeHTTP dispaches registered handlers
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	s.router.ServeHTTP(w, r)
 }

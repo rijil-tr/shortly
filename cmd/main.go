@@ -14,7 +14,7 @@ import (
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 	"github.com/rijil-tr/shortly"
-	"github.com/rijil-tr/shortly/memory"
+	"github.com/rijil-tr/shortly/inmem"
 	"github.com/rijil-tr/shortly/mongo"
 	"github.com/rijil-tr/shortly/server"
 	"github.com/rijil-tr/shortly/shortener"
@@ -37,7 +37,6 @@ var (
 	mongoDBURL   = flag.String("db.url", dburl, "MongoDB URL")
 	databaseName = flag.String("db.name", dbname, "MongoDB database name")
 	inmemory     = flag.Bool("inmem", false, "use in-memory repositories")
-	// ctx          = context.Background()
 
 	links  shortly.LinkRepository
 	logger log.Logger
@@ -49,8 +48,9 @@ func main() {
 
 	logger = log.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
 	logger = log.With(logger, "ts", log.DefaultTimestampUTC)
+
 	if *inmemory {
-		links = memory.NewInMemory()
+		links = inmem.NewInMemory()
 	} else {
 
 		session, err := mgo.Dial(*mongoDBURL)
@@ -63,6 +63,7 @@ func main() {
 
 		links, _ = mongo.NewMongoRepository(*databaseName, session)
 	}
+
 	fieldKeys := []string{"method"}
 	ss := shortener.NewService(links)
 	ss = shortener.NewLoggingService(log.With(logger, "component", "shortener"), ss)
@@ -81,12 +82,15 @@ func main() {
 		}, fieldKeys),
 		ss,
 	)
+
 	srv := server.NewSever(ss, log.With(logger, "component", "http"))
 	errs := make(chan error, 2)
+
 	go func() {
 		logger.Log("transport", "http", "address", *httpAddr, "msg", "listening")
 		errs <- http.ListenAndServe(*httpAddr, srv)
 	}()
+
 	go func() {
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, syscall.SIGINT)
