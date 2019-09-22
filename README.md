@@ -23,7 +23,7 @@ Our URL shortening system should meet the following requirements:
 
 ### Non-Functional
 - [ ] The system should be highly available.
-- [ ] URL redirection should happen in real-time with minimal latency.
+- [X] URL redirection should happen in real-time with minimal latency.
 - [X] Shortened links should not be guessable.
 ---
 ### Running Shortly

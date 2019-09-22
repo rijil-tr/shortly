@@ -24,7 +24,7 @@ import (
 const (
 	defaultHost       = "localhost"
 	defaultPort       = "8080"
-	defaultMongoDBURL = "0.0.0.0"
+	defaultMongoDBURL = "mongodb://mongodb:27017"
 	defaultDBName     = "shortly"
 )
 

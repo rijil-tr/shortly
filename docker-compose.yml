@@ -1,0 +1,16 @@
+version: '3'
+services:
+  shortly:
+    build:
+      context: .
+    ports:
+      - "127.0.0.1:8080:8080"
+    links:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    expose:
+        - "27017"
+    ports:
+      - "127.0.0.1:27017:27017"
