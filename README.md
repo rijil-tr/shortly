@@ -1,4 +1,4 @@
-# [Shortly](https://github.com/rijil-tr/shortly)
+![Shortly](public/images/shortly.png)
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/rijil-tr/shortly?style=flat-square)](https://goreportcard.com/badge/github.com/rijil-tr/shortly)
 [![Issues](https://img.shields.io/github/issues/rijil-tr/shortly)](https://img.shields.io/github/issues/rijil-tr/shortly)
@@ -6,7 +6,7 @@
 [![Stars](https://img.shields.io/github/stars/rijil-tr/shortly)](https://img.shields.io/github/stars/rijil-tr/shortly)
 
 
-[![Shortly](public/images/home.png)](https://faun.dev/join?utm_source=faun&utm_medium=github&utm_campaign=kubernetes-workshop)
+![Shortly](public/images/home.png)
 
 Shortly is a simple URL shortener service written in Golang.
 More detailed step by step tutorial can be found [here](https://github.com/campoy/links).
