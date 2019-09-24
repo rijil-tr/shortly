@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	defaultHost       = "localhost"
+	defaultHost       = "0.0.0.0"
 	defaultPort       = "8080"
 	defaultMongoDBURL = "mongodb://mongodb:27017"
 	defaultDBName     = "shortly"
@@ -87,6 +87,7 @@ func main() {
 	errs := make(chan error, 2)
 
 	go func() {
+		fmt.Println(welcomeMessage())
 		logger.Log("transport", "http", "address", *httpAddr, "msg", "listening")
 		errs <- http.ListenAndServe(*httpAddr, srv)
 	}()
@@ -106,4 +107,24 @@ func envString(env, fallback string) string {
 		return fallback
 	}
 	return e
+}
+
+func welcomeMessage() string {
+	asciiArt :=
+		`
+
+$$$$$$\  $$\                            $$\     $$\           
+$$  __$$\ $$ |                           $$ |    $$ |          
+$$ /  \__|$$$$$$$\   $$$$$$\   $$$$$$\ $$$$$$\   $$ |$$\   $$\ 
+\$$$$$$\  $$  __$$\ $$  __$$\ $$  __$$\\_$$  _|  $$ |$$ |  $$ |
+ \____$$\ $$ |  $$ |$$ /  $$ |$$ |  \__| $$ |    $$ |$$ |  $$ |
+$$\   $$ |$$ |  $$ |$$ |  $$ |$$ |       $$ |$$\ $$ |$$ |  $$ |
+\$$$$$$  |$$ |  $$ |\$$$$$$  |$$ |       \$$$$  |$$ |\$$$$$$$ |
+ \______/ \__|  \__| \______/ \__|        \____/ \__| \____$$ |
+                                                     $$\   $$ |
+                                                     \$$$$$$  |
+                                                      \______/ 
+
+`
+	return asciiArt
 }
