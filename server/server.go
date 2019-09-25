@@ -17,6 +17,8 @@ type Server struct {
 	router    *mux.Router
 }
 
+const STATIC_DIR = "/public/"
+
 // New returns a new HTTP server.
 func NewSever(ss shortener.Service, logger log.Logger) *Server {
 	s := &Server{
@@ -27,6 +29,8 @@ func NewSever(ss shortener.Service, logger log.Logger) *Server {
 	r := mux.NewRouter()
 	r.Use(accessControl)
 	r.HandleFunc("/health", health)
+	r.PathPrefix(STATIC_DIR).
+		Handler(http.StripPrefix(STATIC_DIR, http.FileServer(http.Dir("."+STATIC_DIR))))
 	r.Handle("/metrics", promhttp.Handler()).Methods("GET")
 	h := shorteningHandler{
 		s:      ss,
@@ -59,4 +63,11 @@ func health(w http.ResponseWriter, r *http.Request) {
 // ServeHTTP dispaches registered handlers
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	s.router.ServeHTTP(w, r)
+}
+
+type Health struct {
+	Host    string `json:"host"`
+	Version string `json:"version"`
+	Commit  string `json:"commit"`
+	Built   string `json:"built"`
 }
