@@ -4,7 +4,7 @@ services:
     build:
       context: .
     ports:
-      - "127.0.0.1:8080:8080"
+      - "8080:8080"
     links:
       - mongodb
 
@@ -13,4 +13,4 @@ services:
     expose:
         - "27017"
     ports:
-      - "127.0.0.1:27017:27017"
+      - "0.0.0.0:27017:27017"
