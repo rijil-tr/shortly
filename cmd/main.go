@@ -14,9 +14,9 @@ import (
 	kitprometheus "github.com/go-kit/kit/metrics/prometheus"
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 	"github.com/rijil-tr/shortly"
+	"github.com/rijil-tr/shortly/http/server"
 	"github.com/rijil-tr/shortly/inmem"
 	"github.com/rijil-tr/shortly/mongo"
-	"github.com/rijil-tr/shortly/server"
 	"github.com/rijil-tr/shortly/shortener"
 	"gopkg.in/mgo.v2"
 )

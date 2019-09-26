@@ -1,4 +1,15 @@
-![Shortly](public/images/shortly.png)
+$$$$$$\  $$\                            $$\     $$\           
+$$  __$$\ $$ |                           $$ |    $$ |          
+$$ /  \__|$$$$$$$\   $$$$$$\   $$$$$$\ $$$$$$\   $$ |$$\   $$\ 
+\$$$$$$\  $$  __$$\ $$  __$$\ $$  __$$\\_$$  _|  $$ |$$ |  $$ |
+ \____$$\ $$ |  $$ |$$ /  $$ |$$ |  \__| $$ |    $$ |$$ |  $$ |
+$$\   $$ |$$ |  $$ |$$ |  $$ |$$ |       $$ |$$\ $$ |$$ |  $$ |
+\$$$$$$  |$$ |  $$ |\$$$$$$  |$$ |       \$$$$  |$$ |\$$$$$$$ |
+ \______/ \__|  \__| \______/ \__|        \____/ \__| \____$$ |
+                                                     $$\   $$ |
+                                                     \$$$$$$  |
+                                                      \______/ 
+
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/rijil-tr/shortly?style=flat-square)](https://goreportcard.com/badge/github.com/rijil-tr/shortly)
 [![Issues](https://img.shields.io/github/issues/rijil-tr/shortly)](https://img.shields.io/github/issues/rijil-tr/shortly)
